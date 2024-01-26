@@ -4,22 +4,24 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    Rigidbody2D body; //the player's rigidbody, allows forces to be applied to the player
+    public float moveSpeed;
 
-    public float moveSpeed; //how fast the player moves
+    public Rigidbody2D rb;
 
-    Vector2 axis;
+    private Vector2 move;
 
     void Start()
     {
-        body = GetComponent<Rigidbody2D>(); //access the player's rigidbody and call it "body"
+        rb = GetComponent<Rigidbody2D>();
     }
 
-   
     void Update()
     {
-        axis = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized * moveSpeed;
-        body.AddForce(axis, ForceMode2D.Force);
-    }
+        move.x = Input.GetAxisRaw("Horizontal");
+        move.y = Input.GetAxisRaw("Vertical");
 
+        move.Normalize();
+
+        rb.velocity = move * moveSpeed;
+    }
 }
