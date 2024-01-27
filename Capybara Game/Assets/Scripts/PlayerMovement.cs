@@ -12,22 +12,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        // Initialise 2D rigidbody on start.
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void FixedUpdate()
+    void Update()
     {
-
-        // Get movement axis from Input class, store in Vector2.
         move.x = Input.GetAxisRaw("Horizontal");
         move.y = Input.GetAxisRaw("Vertical");
 
-        // Make vector have magnitude of 1.
         move.Normalize();
 
-        // Set player velocity.
-        rb.velocity = ( move * ( moveSpeed ) );
-
+        rb.velocity = (move * moveSpeed) * Time.deltaTime;
     }
 }
