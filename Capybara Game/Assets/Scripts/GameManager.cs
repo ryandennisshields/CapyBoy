@@ -228,13 +228,6 @@ public class GameManager : MonoBehaviour
                 #else
                     Application.Quit();
                 #endif
-                if (Application.isEditor)
-                {
-                    
-                } else
-                {
-                    
-                }
             }
         }
     }
