@@ -2276,9 +2276,9 @@ MonoBehaviour:
   bottomLeft: {fileID: 338448868}
   bottomRight: {fileID: 1587454342}
   middle: {fileID: 795036763}
-  burger: {fileID: 7286310077692024254, guid: 031ad2cd496ab944eb32e8d54083ac58, type: 3}
-  pasta: {fileID: 7112263122644182865, guid: 86620107460abe242b967550025f7a1d, type: 3}
-  pizza: {fileID: 5478439749523754507, guid: 5fe09d0cbf0261a4cb2755d55a0167fb, type: 3}
+  burger: {fileID: 7286310077692024254, guid: 2b456480f6a8ab746b94209951673448, type: 3}
+  pasta: {fileID: 7112263122644182865, guid: a0a7c253d49f36643bc5e2e32d978fcc, type: 3}
+  pizza: {fileID: 5478439749523754507, guid: fee4b701c3bdec74c8ef443316f216bd, type: 3}
 --- !u!1 &1978822086
 GameObject:
   m_ObjectHideFlags: 0
