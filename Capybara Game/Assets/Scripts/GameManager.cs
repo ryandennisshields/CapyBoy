@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -189,8 +190,21 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // Invert current pause state.
-            this.PauseState = !this.PauseState;
+            if (PauseCanvas != null)
+            {
+                // Invert current pause state.
+                this.PauseState = !this.PauseState;
+            } else
+            {
+                // Check if in editor to determine which exit method to use.
+                if (Application.isEditor)
+                {
+                    EditorApplication.isPlaying = false;
+                } else
+                {
+                    Application.Quit();
+                }
+            }
         }
     }
 
