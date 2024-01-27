@@ -14,14 +14,14 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
     }
-
-    void Update()
+    
+    void FixedUpdate()
     {
         move.x = Input.GetAxisRaw("Horizontal");
         move.y = Input.GetAxisRaw("Vertical");
 
         move.Normalize();
 
-        rb.velocity = (move * moveSpeed) * Time.deltaTime;
+        rb.velocity = (move * moveSpeed);
     }
 }
