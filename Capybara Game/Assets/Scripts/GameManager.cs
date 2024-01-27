@@ -28,20 +28,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private bool _PauseWimpUIVisible = false;
-    public bool PauseWimpUIVisible
-    {
-        // Ensure private variable can be passed to public.
-        get { return _PauseWimpUIVisible; }
-        // Ensure public variable can be passed to private.
-        // Also, we want to do something when this is changed (check state, pause/unpause etc.)
-        set
-        {
-            _PauseWimpUIVisible = value;
-            this.PauseWimpUICanvas.gameObject.SetActive(value);
-        }
-    }
-
     private bool _WinScreenCanvasVisible = false;
     public bool WinScreenCanvasVisible
     {
@@ -52,11 +38,15 @@ public class GameManager : MonoBehaviour
         set
         {
             _WinScreenCanvasVisible = value;
-            this.WinScreenCanvas.gameObject.SetActive(value);
+            this.WinScreenCanvas.enabled = value;
 
-            if (value)
+            // WinScreenCanvas can be null in dev mode.
+            if (value && this.WinScreenCanvas != null)
             {
                 this.WinScreenCanvas.GetComponentInChildren<AudioSource>().Play();
+
+                // Pause the game (bypass GameManager for this).
+                Time.timeScale = 0;
             }
         }
     }
@@ -84,14 +74,22 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this.gameObject);
 
-        // Get pause canvas.
-        PauseCanvas = this.gameObject.GetComponentsInChildren<Canvas>().ToList().Find(x => x.name.Contains("PauseCanvas"));
-        PauseWimpUICanvas = this.PauseCanvas.gameObject.GetComponentsInChildren<CanvasRenderer>().ToList().Find(x => x.name.Contains("MenuReturnPanel"));
-        PauseWimpUICanvas.gameObject.SetActive(false);
+        // ONLY INSTANTIATE THESE WHEN THEY EXIST!
+        if (this.gameObject.GetComponentsInChildren<Canvas>().Length > 0)
+        {
+            // Get pause canvas.
+            PauseCanvas = this.gameObject.GetComponentsInChildren<Canvas>().ToList().Find(x => x.name.Contains("PauseCanvas"));
 
-        WinScreenCanvas = this.gameObject.GetComponentsInChildren<Canvas>().ToList().Find(x => x.name.Contains("WinScreenCanvas"));
-        Debug.Log(WinScreenCanvas);
-        WinScreenCanvas.gameObject.SetActive(false);
+            WinScreenCanvas = this.gameObject.GetComponentsInChildren<Canvas>().ToList().Find(x => x.name.Contains("WinScreenCanvas"));
+            if (WinScreenCanvas != null)
+            {
+                WinScreenCanvas.enabled = false;
+            }
+        } else
+        {
+            Debug.LogWarning("GameManager has been instantiated by the playtest stub. Pause menu and win screen will not be available.");
+        }
+
     }
 
     // Level change request function.
@@ -165,8 +163,11 @@ public class GameManager : MonoBehaviour
         //Debug.Log("Game has been paused.");
         Time.timeScale = 0;
 
-        // Display pause UI.
-        PauseCanvas.enabled = true;
+        // Display pause UI if instantiated.
+        if (PauseCanvas != null)
+        {
+            PauseCanvas.enabled = true;
+        }
     }
 
     // Private function to unpause game
@@ -176,8 +177,11 @@ public class GameManager : MonoBehaviour
         //Debug.Log("Game has been unpaused.");
         Time.timeScale = 1;
 
-        // Hide pause UI.
-        PauseCanvas.enabled = false;
+        // Hide pause UI if instantiated.
+        if (PauseCanvas != null)
+        {
+            PauseCanvas.enabled = false;
+        }
     }
 
     // Update loop for pausing.

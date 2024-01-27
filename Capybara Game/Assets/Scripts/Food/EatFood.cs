@@ -38,4 +38,5 @@ public class EatFood : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
+
 }

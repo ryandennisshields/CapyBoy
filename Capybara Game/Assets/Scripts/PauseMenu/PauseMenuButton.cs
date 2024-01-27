@@ -28,18 +28,9 @@ public class PauseMenuButton : MonoBehaviour
                 gameManager.PauseState = false;
                 break;
 
-            // Make player confirm their quit.
             case ButtonTypes.ReturnToMenu:
-                gameManager.PauseWimpUIVisible = true;
-                break;
-
-            case ButtonTypes.WimpMenuConfirmMenu:
                 // Return to menu.
                 gameManager.ReturnToMainMenu();
-                break;
-
-            case ButtonTypes.WimpMenuConfirmContinue:
-                gameManager.PauseWimpUIVisible = false;
                 break;
 
             default:
