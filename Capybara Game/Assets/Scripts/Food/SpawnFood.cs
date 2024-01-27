@@ -20,6 +20,8 @@ public class SpawnFood : MonoBehaviour
     public GameObject pizza;
 
     private Transform spawnPoint;
+
+    [SerializeField] private AudioSource pop;
   
     void Update()
     {
@@ -35,6 +37,8 @@ public class SpawnFood : MonoBehaviour
     {
         locationNumber = Random.Range(1, 6); // 5 spawn points, Number between 1 and 5
         foodNumber = Random.Range(1, 4); // 3 food types, Number between 1 and 3
+
+        pop.Play();
 
         switch (locationNumber)
         {
