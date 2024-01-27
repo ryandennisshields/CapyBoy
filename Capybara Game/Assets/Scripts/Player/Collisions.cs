@@ -13,6 +13,7 @@ public class Collisions : MonoBehaviour
     public GameObject Burrow2;
 
     [SerializeField] private AudioSource crunch;
+    [SerializeField] private AudioSource pipe; //sound going into burrow
 
     private GameManager gameManager;
     void Start()
@@ -43,10 +44,12 @@ public class Collisions : MonoBehaviour
         if (collision.gameObject == Burrow1) 
         {
             gameObject.transform.position = new Vector2(Burrow2.transform.position.x - 2, Burrow2.transform.position.y);
+            pipe.Play();
         }
         if (collision.gameObject == Burrow2)
         {
             gameObject.transform.position = new Vector2(Burrow1.transform.position.x - 2, Burrow1.transform.position.y);
+            pipe.Play();
         }
     }
 
