@@ -8,7 +8,7 @@ public class GameManagerStub : MonoBehaviour
     void Awake()
     {
         // Only run this stub if GameManager isn't instantiated.
-        if (object.ReferenceEquals(GameObject.Find("GameManager"), null))
+        if (GameObject.Find("GameManager") == null)
         {
             // Instantiate game manager.
             this.gameObject.AddComponent<GameManager>();

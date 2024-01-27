@@ -73,7 +73,17 @@ public class GameManager : MonoBehaviour
         // Set up scene load detect event.
         SceneManager.sceneLoaded += this.OnNewLevelLoaded;
 
-        DontDestroyOnLoad(this.gameObject);
+        if (GameObject.FindGameObjectsWithTag("GameManager").Length > 1)
+        {
+            // GameManager already exists, having two will cause undefined
+            // behaviour.
+            Destroy(this.gameObject);
+        } else
+        {
+            // We can instantiate.
+            DontDestroyOnLoad(this.gameObject);
+        }
+        
 
         // ONLY INSTANTIATE THESE WHEN THEY EXIST!
         if (this.gameObject.GetComponentsInChildren<Canvas>().Length > 0)
