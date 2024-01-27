@@ -1785,7 +1785,7 @@ GameObject:
   - component: {fileID: 797928470}
   - component: {fileID: 797928471}
   m_Layer: 0
-  m_Name: 'Collider '
+  m_Name: 'Nest Collider '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1798,13 +1798,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 797928469}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.5, y: -7.35, z: 0}
-  m_LocalScale: {x: 3.7125, y: 2.7125, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -6.747925, y: -3.4291418, z: 0}
+  m_LocalScale: {x: 1.7416768, y: 1.2876595, z: 0.9266934}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1312036305}
-  m_RootOrder: -1
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &797928471
 BoxCollider2D:
@@ -1816,7 +1816,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -2514,7 +2514,6 @@ Transform:
   m_LocalScale: {x: 0.46913853, y: 0.47471318, z: 0.9266934}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 797928470}
   - {fileID: 610880423}
   - {fileID: 244597111}
   - {fileID: 351184515}
