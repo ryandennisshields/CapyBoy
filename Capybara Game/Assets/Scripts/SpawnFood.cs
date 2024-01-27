@@ -22,12 +22,6 @@ public class SpawnFood : MonoBehaviour
     private Transform spawnPoint;
 
     private bool active;
-
-    void Start()
-    {
-        
-    }
-
   
     void Update()
     {
@@ -43,47 +37,39 @@ public class SpawnFood : MonoBehaviour
     {
         active = true;
 
-        locationNumber = Random.Range(1, 5); // 4 spawn points, Number between 1 and 4
+        locationNumber = Random.Range(1, 6); // 5 spawn points, Number between 1 and 5
         foodNumber = Random.Range(1, 4); // 3 food types, Number between 1 and 3
 
-        if (locationNumber == 1)
+        switch (locationNumber)
         {
-            spawnPoint = topLeft;
+            case 1:
+                spawnPoint = topLeft;
+                break;
+            case 2:
+                spawnPoint = bottomLeft;
+                break;
+            case 3:
+                spawnPoint = middle;
+                break;
+            case 4:
+                spawnPoint = topRight;
+                break;
+            case 5:
+                spawnPoint = bottomRight;
+                break;
         }
 
-        if (locationNumber == 2)
+        switch (foodNumber)
         {
-            spawnPoint = topRight;
-        }
-
-        if (locationNumber == 3)
-        {
-            spawnPoint = bottomLeft;
-        }
-
-        if (locationNumber == 4)
-        {
-            spawnPoint = bottomRight;
-        }
-
-        if (locationNumber == 5)
-        {
-            spawnPoint = middle;
-        }
-
-        if (foodNumber == 1)
-        {
-            GameObject newFood = Instantiate(burger, spawnPoint.position, Quaternion.Euler(0, 0, 0));
-        }
-
-        if (foodNumber == 2)
-        {
-            GameObject newFood = Instantiate(pizza, spawnPoint.position, Quaternion.Euler(0, 0, 0));
-        }
-
-        if (foodNumber == 3)
-        {
-            GameObject newFood = Instantiate(pasta, spawnPoint.position, Quaternion.Euler(0, 0, 0));
+            case 1:
+                GameObject newBurger = Instantiate(burger, spawnPoint.position, spawnPoint.rotation);
+                break;
+            case 2:
+                GameObject newPizza = Instantiate(pizza, spawnPoint.position, spawnPoint.rotation);
+                break;
+            case 3:
+                GameObject newPasta = Instantiate(pasta, spawnPoint.position, spawnPoint.rotation);
+                break;
         }
 
         yield return new WaitForSeconds(shootTimer);
