@@ -223,12 +223,17 @@ public class GameManager : MonoBehaviour
             } else
             {
                 // Check if in editor to determine which exit method to use.
+                #if UNITY_EDITOR
+                    EditorApplication.isPlaying = false;
+                #else
+                    Application.Quit();
+                #endif
                 if (Application.isEditor)
                 {
-                    EditorApplication.isPlaying = false;
+                    
                 } else
                 {
-                    Application.Quit();
+                    
                 }
             }
         }
