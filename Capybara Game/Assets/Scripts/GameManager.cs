@@ -24,7 +24,10 @@ public class GameManager : MonoBehaviour
                 _PauseGame();
             } else
             {
-                _UnpauseGame();
+                if (!this.WinScreenCanvasVisible)
+                {
+                    _UnpauseGame();
+                }
             }
         }
     }
@@ -158,6 +161,12 @@ public class GameManager : MonoBehaviour
             }
 
             // Forcefully return false as path has ended.
+            return false;
+        }
+
+        // Don't allow pause screen to override win screen.
+        if (this.WinScreenCanvasVisible)
+        {
             return false;
         }
 
