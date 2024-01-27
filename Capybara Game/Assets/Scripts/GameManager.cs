@@ -123,6 +123,13 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
+    // Restart level button.
+    // Just reload the level we are on.
+    public void RestartLevel()
+    {
+        this.RequestLevelChange(SceneManager.GetActiveScene().name);
+    }
+
     // Simple return to menu stub function.
     public void ReturnToMainMenu()
     {
