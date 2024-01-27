@@ -7,9 +7,15 @@ public class EatFood : MonoBehaviour
 {
     // The player's meter
     public GameObject[] filledIndicators;
-    private int indicatorToFill = 0;
+    public int indicatorToFill = 0;
 
     [SerializeField] private AudioSource crunch;
+
+    private GameManager gameManager;
+    void Start()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -23,6 +29,12 @@ public class EatFood : MonoBehaviour
                 filledIndicators[indicatorToFill].SetActive(true);
                 indicatorToFill++;
             }
+
+            if (indicatorToFill >= 5)
+            {
+                gameManager.WinScreenCanvasVisible = true;
+            }
+
             Destroy(collision.gameObject);
         }
     }

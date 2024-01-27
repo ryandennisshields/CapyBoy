@@ -42,6 +42,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private bool _WinScreenCanvasVisible = false;
+    public bool WinScreenCanvasVisible
+    {
+        // Ensure private variable can be passed to public.
+        get { return _WinScreenCanvasVisible; }
+        // Ensure public variable can be passed to private.
+        // Also, we want to do something when this is changed (check state, pause/unpause etc.)
+        set
+        {
+            _WinScreenCanvasVisible = value;
+            this.WinScreenCanvas.gameObject.SetActive(value);
+
+            if (value)
+            {
+                this.WinScreenCanvas.GetComponentInChildren<AudioSource>().Play();
+            }
+        }
+    }
+
     // Array of Scenes to inhibit pause on.
     // Pausing here could cause things to break.
     private readonly string[] InhibitPauseScenes =
@@ -52,6 +71,9 @@ public class GameManager : MonoBehaviour
     // Storage container for reference to Pause Canvas
     private Canvas PauseCanvas;
     private CanvasRenderer PauseWimpUICanvas;
+
+    // Storage container for reference to WinScreen Canvas.
+    private Canvas WinScreenCanvas;
 
     // Instantisation function.
     // Just makes sure this class remains in memory.
@@ -66,6 +88,10 @@ public class GameManager : MonoBehaviour
         PauseCanvas = this.gameObject.GetComponentsInChildren<Canvas>().ToList().Find(x => x.name.Contains("PauseCanvas"));
         PauseWimpUICanvas = this.PauseCanvas.gameObject.GetComponentsInChildren<CanvasRenderer>().ToList().Find(x => x.name.Contains("MenuReturnPanel"));
         PauseWimpUICanvas.gameObject.SetActive(false);
+
+        WinScreenCanvas = this.gameObject.GetComponentsInChildren<Canvas>().ToList().Find(x => x.name.Contains("WinScreenCanvas"));
+        Debug.Log(WinScreenCanvas);
+        WinScreenCanvas.gameObject.SetActive(false);
     }
 
     // Level change request function.

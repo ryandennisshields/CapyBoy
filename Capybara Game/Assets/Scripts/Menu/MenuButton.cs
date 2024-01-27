@@ -25,7 +25,7 @@ public class MenuButton : MonoBehaviour
         switch (ButtonType)
         {
             case ButtonTypes.Start:
-                gameManager.RequestLevelChange("Main Level");
+                gameManager.RequestLevelChange("Joshua Playtest");
                 break;
 
             case ButtonTypes.Quit:
