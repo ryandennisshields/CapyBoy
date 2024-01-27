@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
     // Just makes sure this class remains in memory.
     private void Awake()
     {
+        // Set up scene load detect event.
+        SceneManager.sceneLoaded += this.OnNewLevelLoaded;
+
         DontDestroyOnLoad(this.gameObject);
 
         // Get pause canvas.
@@ -135,6 +138,17 @@ public class GameManager : MonoBehaviour
         {
             // Invert current pause state.
             this.PauseState = !this.PauseState;
+        }
+    }
+
+    // Event for scene loaded.
+    private void OnNewLevelLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Play level music if it exists.
+        if (GameObject.Find("LevelMusic"))
+        {
+            // Play level music.
+            GameObject.Find("LevelMusic").GetComponent<AudioSource>().Play();
         }
     }
 }
