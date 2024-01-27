@@ -7,7 +7,7 @@ public class SpawnFood : MonoBehaviour
     private float locationNumber;
     private float foodNumber;
 
-    private float spawnTimer = 15;
+    private float spawnTimer = 8;
 
     public Transform topLeft;
     public Transform topRight;
