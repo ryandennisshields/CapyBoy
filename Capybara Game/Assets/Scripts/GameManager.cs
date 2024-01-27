@@ -28,6 +28,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private bool _PauseWimpUIVisible = false;
+    public bool PauseWimpUIVisible
+    {
+        // Ensure private variable can be passed to public.
+        get { return _PauseWimpUIVisible; }
+        // Ensure public variable can be passed to private.
+        // Also, we want to do something when this is changed (check state, pause/unpause etc.)
+        set
+        {
+            _PauseWimpUIVisible = value;
+            this.PauseWimpUICanvas.gameObject.SetActive(value);
+        }
+    }
+
     // Array of Scenes to inhibit pause on.
     // Pausing here could cause things to break.
     private readonly string[] InhibitPauseScenes =
@@ -37,6 +51,7 @@ public class GameManager : MonoBehaviour
 
     // Storage container for reference to Pause Canvas
     private Canvas PauseCanvas;
+    private CanvasRenderer PauseWimpUICanvas;
 
     // Instantisation function.
     // Just makes sure this class remains in memory.
@@ -49,6 +64,8 @@ public class GameManager : MonoBehaviour
 
         // Get pause canvas.
         PauseCanvas = this.gameObject.GetComponentsInChildren<Canvas>().ToList().Find(x => x.name.Contains("PauseCanvas"));
+        PauseWimpUICanvas = this.PauseCanvas.gameObject.GetComponentsInChildren<CanvasRenderer>().ToList().Find(x => x.name.Contains("MenuReturnPanel"));
+        PauseWimpUICanvas.gameObject.SetActive(false);
     }
 
     // Level change request function.
@@ -66,6 +83,12 @@ public class GameManager : MonoBehaviour
         }
 
         SceneManager.LoadScene(sceneName);
+    }
+
+    // Simple return to menu stub function.
+    public void ReturnToMainMenu()
+    {
+        this.RequestLevelChange("Main Menu");
     }
 
     // Quit game function.
