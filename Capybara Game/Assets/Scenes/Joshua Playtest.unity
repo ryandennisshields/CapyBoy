@@ -249,6 +249,7 @@ GameObject:
   m_Component:
   - component: {fileID: 88779200}
   - component: {fileID: 88779201}
+  - component: {fileID: 88779202}
   m_Layer: 0
   m_Name: Burrow
   m_TagString: Untagged
@@ -323,6 +324,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &88779202
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88779199}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 2
 --- !u!1 &140741734
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,6 +586,9 @@ MonoBehaviour:
   - {fileID: 7114361118875274241}
   - {fileID: 7114361118861487056}
   - {fileID: 7114361118551338766}
+  indicatorToFill: 0
+  Burrow1: {fileID: 88779199}
+  Burrow2: {fileID: 1838691943}
   crunch: {fileID: 297896680}
 --- !u!114 &297896674
 MonoBehaviour:
@@ -2381,6 +2401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1838691944}
   - component: {fileID: 1838691945}
+  - component: {fileID: 1838691946}
   m_Layer: 0
   m_Name: Burrow (1)
   m_TagString: Untagged
@@ -2455,6 +2476,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &1838691946
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838691943}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 2
 --- !u!1 &1912562166
 GameObject:
   m_ObjectHideFlags: 0
