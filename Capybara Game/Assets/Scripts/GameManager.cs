@@ -1,15 +1,67 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    // Boolean for handling game pause state.
+    // Game should always start unpaused or unexpected behaviour may occur.
+    private bool _GamePaused = false;
+    public bool PauseState {
+        // Ensure private variable can be passed to public.
+        get { return _GamePaused; }
+        // Ensure public variable can be passed to private.
+        // Also, we want to do something when this is changed (check state, pause/unpause etc.)
+        set
+        {
+            _GamePaused = _ValidatePauseChange(_GamePaused, value);
+            if (_GamePaused)
+            {
+                _PauseGame();
+            } else
+            {
+                _UnpauseGame();
+            }
+        }
+    }
+
+    // Array of Scenes to inhibit pause on.
+    // Pausing here could cause things to break.
+    private readonly string[] InhibitPauseScenes =
+    {
+        "Main Menu"
+    };
+
+    // Storage container for reference to Pause Canvas
+    private Canvas PauseCanvas;
+
+    // Instantisation function.
+    // Just makes sure this class remains in memory.
+    private void Awake()
+    {
+        DontDestroyOnLoad(this.gameObject);
+
+        // Get pause canvas.
+        PauseCanvas = this.gameObject.GetComponentsInChildren<Canvas>().ToList().Find(x => x.name.Contains("PauseCanvas"));
+    }
+
     // Level change request function.
     // Can implement logic here to check if a scene change is practical and
     // block if necessary.
     public void RequestLevelChange(string sceneName)
     {
+        // Before change make sure that the scene we are transitioning to
+        // does not inhibit pause. If it does, unpause the game.
+        if (this.InhibitPauseScenes.Contains(sceneName))
+        {
+            // Pause is inhibited for the scene we are loading.
+            // Unpause the game by force prior to scene change.
+            this.PauseState = false;
+        }
+
         SceneManager.LoadScene(sceneName);
     }
 
@@ -29,4 +81,60 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Private function to validate the pause change on set.
+    private bool _ValidatePauseChange(bool oldState, bool newState)
+    {
+        // Don't even bother going further if the old and new state are identical.
+        if (oldState == newState) { return newState; }
+
+        // Check scene. We do not want to pause on a scene where pause is inhibited.
+        if (this.InhibitPauseScenes.Contains(SceneManager.GetActiveScene().name) && newState)
+        {
+            // Force set to unpaused if old state was paused (how did we pause?)
+            if (oldState == true)
+            {
+                this._GamePaused = false;
+            }
+
+            // Forcefully return false as path has ended.
+            return false;
+        }
+
+        // As all validations have passed at this point, allow
+        // the new state to be passed to the setter.
+       
+        return newState;
+    }
+
+    // Private function to pause game
+    private void _PauseGame()
+    {
+        // For now simply just set TimeScale to 0
+        //Debug.Log("Game has been paused.");
+        Time.timeScale = 0;
+
+        // Display pause UI.
+        PauseCanvas.enabled = true;
+    }
+
+    // Private function to unpause game
+    private void _UnpauseGame()
+    {
+        // For now simply just set TimeScale to 1
+        //Debug.Log("Game has been unpaused.");
+        Time.timeScale = 1;
+
+        // Hide pause UI.
+        PauseCanvas.enabled = false;
+    }
+
+    // Update loop for pausing.
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // Invert current pause state.
+            this.PauseState = !this.PauseState;
+        }
+    }
 }

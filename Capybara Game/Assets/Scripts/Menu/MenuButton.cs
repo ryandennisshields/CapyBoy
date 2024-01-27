@@ -11,13 +11,11 @@ public class MenuButton : MonoBehaviour
 
     public ButtonTypes ButtonType;
 
-    private GameObject gameManagerEntity;
     private GameManager gameManager;
 
     void Start()
     {
-        gameManagerEntity = GameObject.Find("GameManager");
-        gameManager = gameManagerEntity.GetComponent<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public void OnMouseClick()
