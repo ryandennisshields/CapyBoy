@@ -4,22 +4,20 @@ using UnityEngine;
 
 public class DestroyFood : MonoBehaviour
 {
-    public float bulletLifetime = 10;
+    public float foodLifetime = 10;
 
     void Start()
     {
-        StartCoroutine(bulletDie());
+        StartCoroutine(foodExpire());
     }
 
-    IEnumerator bulletDie()
+    IEnumerator foodExpire()
     {
-        yield return new WaitForSeconds(bulletLifetime);
-        Explode();
+        yield return new WaitForSeconds(foodLifetime);
+        Expire();
     }
 
-
-
-    void Explode()
+    void Expire()
     {
         Destroy(gameObject);
     }
