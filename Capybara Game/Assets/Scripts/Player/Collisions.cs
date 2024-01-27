@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EatFood : MonoBehaviour
+public class Collisions : MonoBehaviour
 {
-    // The player's meter
+    // The player's fill indicators
     public GameObject[] filledIndicators;
     public int indicatorToFill = 0;
+
+    public GameObject Burrow1;
+    public GameObject Burrow2;
 
     [SerializeField] private AudioSource crunch;
 
@@ -36,6 +39,14 @@ public class EatFood : MonoBehaviour
             }
 
             Destroy(collision.gameObject);
+        }
+        if (collision.gameObject == Burrow1) 
+        {
+            gameObject.transform.position = new Vector2(Burrow2.transform.position.x - 2, Burrow2.transform.position.y);
+        }
+        if (collision.gameObject == Burrow2)
+        {
+            gameObject.transform.position = new Vector2(Burrow1.transform.position.x - 2, Burrow1.transform.position.y);
         }
     }
 
