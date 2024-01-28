@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelController : MonoBehaviour
 {
@@ -37,6 +38,19 @@ public class LevelController : MonoBehaviour
     }
     ///////////////// END VARAIBLES FOR INDICATOR UI /////////////////
 
+    ///////////////// VARIABLES FOR FOOD HOLDING UI / NEST HANDLER /////////////////
+    public GameObject FoodHoldingUIElement;
+    public GameObject NestCollider;
+
+    public AudioSource CrunchSoundFX;
+    public AudioSource NestDepositSoundFX;
+
+    public bool PlayerIsHoldingItem;
+    public GameObject PlayerHoldingItemType;
+
+    
+    ///////////////// END VARIABLES FOR FOOD HOLDING UI / NEST HANDLER /////////////////
+    
     ///////////////// VARIABLES FOR RANDOM FOOD SPAWN HANDLING /////////////////
     public GameObject[] FoodSpawnLocations;
     public GameObject[] FoodTypes;
@@ -108,7 +122,124 @@ public class LevelController : MonoBehaviour
         FoodSpawnSoundFX.Play();
 
         // Create the object with the given parameters.
-        Instantiate(FoodObject, SpawnPosition.position, SpawnPosition.rotation);
+        GameObject newFood = Instantiate(FoodObject, SpawnPosition.position, SpawnPosition.rotation);
+
+        // Tie into Nest Handler, don't enable collisions if food isn't meant to be picked up
+        if (this.PlayerIsHoldingItem)
+        {
+            newFood.GetComponent<Collider2D>().enabled = false;
+        }
+
+        // Set name to allow the PlayerEatFood function to find the Prefab.
+        newFood.name = FoodObject.name;
+    }
+
+    private void _UpdateFoodUI()
+    {
+        Debug.Log(this.PlayerIsHoldingItem);
+
+        // Get Image from UI element.
+        Image uiElementImage = this.FoodHoldingUIElement.GetComponent<Image>();
+
+        // Don't do anything if player is not holding item (Food UI element will be INACTIVE).
+        if (!this.PlayerIsHoldingItem)
+        {
+            uiElementImage.enabled = false;
+            return;
+        }
+
+        // Get sprite renderer from prefab.
+        Sprite prefabSprite = this.PlayerHoldingItemType.GetComponent<SpriteRenderer>().sprite;
+
+        // Set current image to prefab element.
+        uiElementImage.sprite = prefabSprite;
+
+        // Finally, show image.
+        uiElementImage.enabled = true;
+    }
+
+    public void PlayerEatFood(GameObject foodObject)
+    {
+        // Player has eaten a food.
+        Debug.Log("A food has been eaten (yum!)");
+
+        // TODO: perhaps provide audible feedback that player cannot pick more than
+        // one item up?
+        if (PlayerIsHoldingItem)
+        {
+            return;
+        }
+
+        // Player not holding item at this point, make them hold item.
+        // Get item Prefab (not the cloned object!)
+        GameObject itemPrefab = null;
+        for (int i = 0; i < this.FoodTypes.Length; i++)
+        {
+            if (this.FoodTypes[i].name == foodObject.name)
+            {
+                itemPrefab = this.FoodTypes[i];
+                break;
+            }
+        }
+
+        // Handle a can't-happen scenario where an invalid food has been consumed.
+        if (itemPrefab == null)
+        {
+            Debug.LogWarning("Tried to eat an invalid food item (name: " + foodObject.name + ")");
+            return;
+        }
+
+        // Set player holding item type as it is known not to be null.
+        PlayerIsHoldingItem = true;
+        PlayerHoldingItemType = itemPrefab;
+
+        // Make all food uncollidable.
+        GameObject[] allFood = GameObject.FindGameObjectsWithTag("Food");
+        for (int i = 0; i < allFood.Length; i++)
+        {
+            allFood[i].GetComponent<Collider2D>().enabled = false;
+        }
+
+        // Play crunch sound & destroy the food as all checks have been performed.
+        this.CrunchSoundFX.Play();
+        Destroy(foodObject);
+
+        // Call UI update event.
+        this._UpdateFoodUI();
+
+        // Enable the nest collider.
+        this.NestCollider.GetComponent<Collider2D>().enabled = true;
+    }
+
+    // Handle nest collider.
+    public void PlayerDepositFood()
+    {
+        // Only fire if player has item.
+        if (!PlayerIsHoldingItem)
+        {
+            return;
+        }
+
+        // Deposit food in nest, obtain point.
+        PlayerIsHoldingItem = false;
+        PlayerHoldingItemType = null;
+
+        // Update UI and increment the indicator.
+        _UpdateFoodUI();
+        this.IndicatorsFilled++;
+
+        // Play sound effect.
+        this.NestDepositSoundFX.Play();
+
+        // Allow food to be consumed again.
+        GameObject[] allFood = GameObject.FindGameObjectsWithTag("Food");
+        for (int i = 0; i < allFood.Length; i++)
+        {
+            allFood[i].GetComponent<Collider2D>().enabled = true;
+        }
+
+        // Also disable the nest collider.
+        this.NestCollider.GetComponent<Collider2D>().enabled = false;
     }
 
     private void Update()

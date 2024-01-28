@@ -29,11 +29,7 @@ public class Collisions : MonoBehaviour
         // If the other object that the player is colliding with has the tag "Food", add to the meter and destroy the food
         if (collision.gameObject.tag == "Food") 
         {
-            crunch.Play();
-
-            levelController.IndicatorsFilled++;
-
-            Destroy(collision.gameObject);
+            levelController.PlayerEatFood(collision.gameObject);
         }
         if (collision.gameObject == Burrow1) 
         {
@@ -44,6 +40,10 @@ public class Collisions : MonoBehaviour
         {
             gameObject.transform.position = new Vector2(Burrow1.transform.position.x - 2, Burrow1.transform.position.y);
             pipe.Play();
+        }
+        if (collision.gameObject.tag == "Nest")
+        {
+            levelController.PlayerDepositFood();
         }
     }
 
