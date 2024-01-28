@@ -2904,6 +2904,7 @@ MonoBehaviour:
   NestCollider: {fileID: 797928469}
   CrunchSoundFX: {fileID: 1411793081}
   NestDepositSoundFX: {fileID: 1411793079}
+  NestObject: {fileID: 1560671857}
   PlayerIsHoldingItem: 0
   PlayerHoldingItemType: {fileID: 0}
   FoodSpawnLocations:
