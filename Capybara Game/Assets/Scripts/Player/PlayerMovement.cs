@@ -26,16 +26,32 @@ public class PlayerMovement : MonoBehaviour
         // Set the animator's walking bool to "true" if the capybara is moving, false if not
         if (rb.velocity.x != 0 || rb.velocity.y != 0) 
         {
-            animator.SetBool("Walking", true);
-            // Flip the sprite depending on the movement direction
+            if (rb.velocity.y > 0 && rb.velocity.x == 0)
+                animator.SetBool("WalkingUp", true);
+            else
+                animator.SetBool("WalkingUp", false);
+            if (rb.velocity.y < 0 && rb.velocity.x == 0)
+                animator.SetBool("WalkingDown", true);
+            else
+                animator.SetBool("WalkingDown", false);
             if (rb.velocity.x > 0)
+            {
+                animator.SetBool("WalkingHorizontal", true);
                 spriteRenderer.flipX = true;
+            }
             else if (rb.velocity.x < 0)
+            {
+                animator.SetBool("WalkingHorizontal", true);
                 spriteRenderer.flipX = false;
+            }
+            else
+                animator.SetBool("WalkingHorizontal", false);
         }
         else
         {
-            animator.SetBool("Walking", false);
+            animator.SetBool("WalkingUp", false);
+            animator.SetBool("WalkingDown", false);
+            animator.SetBool("WalkingHorizontal", false);
         }
 
         // Normalise the updated Vector2 (magnitude of 1).
