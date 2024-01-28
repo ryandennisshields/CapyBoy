@@ -1,4 +1,4 @@
-#define ALLOW_TEST_MODE 
+//#define ALLOW_TEST_MODE 
 
 using System;
 using System.Collections;
@@ -35,7 +35,6 @@ public class LevelController : MonoBehaviour
 
             if (value > PreviousIndicatorFilled)
             {
-                Debug.Log("Point has been added, would flash news point.");
                 // Set points before it.
                 for (int i = 0; i < value-1; i++)
                 {
@@ -44,7 +43,6 @@ public class LevelController : MonoBehaviour
                 StartCoroutine(_FlashPointIndicator(AvailableIndicators[value-1], true));
             } else
             {
-                Debug.Log("Point has been removed, would flash removed point");
                 // Get the removed point.
                 GameObject RemovedIndicatorObject = AvailableIndicators[value];
                 RemovedIndicatorObject.SetActive(true);
@@ -71,6 +69,8 @@ public class LevelController : MonoBehaviour
 
     public AudioSource CrunchSoundFX;
     public AudioSource NestDepositSoundFX;
+
+    public GameObject NestObject;
 
     public bool PlayerIsHoldingItem;
     public GameObject PlayerHoldingItemType;
@@ -359,6 +359,21 @@ public class LevelController : MonoBehaviour
 
         // Enable the nest collider.
         this.NestCollider.GetComponent<Collider2D>().enabled = true;
+
+        StartCoroutine(_FlashNestObject());
+    }
+
+    IEnumerator _FlashNestObject()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            this.NestObject.SetActive(true);
+            yield return new WaitForSeconds(0.25f);
+            this.NestObject.SetActive(false);
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        this.NestObject.SetActive(true);
     }
 
     // Handle pelicon collider.

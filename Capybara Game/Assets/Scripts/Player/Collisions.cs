@@ -14,6 +14,7 @@ public class Collisions : MonoBehaviour
 
     [SerializeField] private AudioSource crunch;
     [SerializeField] private AudioSource pipe; //sound going into burrow
+    [SerializeField] private AudioSource pelicanSteal;
 
     private GameManager gameManager;
     private LevelController levelController;
@@ -41,6 +42,9 @@ public class Collisions : MonoBehaviour
             gameObject.transform.position = new Vector2(Burrow1.transform.position.x - 2, Burrow1.transform.position.y);
             pipe.Play();
         }
+        if (collision.gameObject.tag == "Pelican")
+            pelicanSteal.Play();
+
         
     }
 

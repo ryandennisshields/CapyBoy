@@ -20,7 +20,7 @@ public class PelicanAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Set the ai destination to the player, grab the level controller and ai path, and set the death timer
+        // Set the ai destination to the player, grab the level controller, level music and ai path, and set the death timer
         aiDestination = GetComponent<AIDestinationSetter>();
         aiPath = GetComponent<AIPath>();
         aiDestination.target = GameObject.Find("Player").transform;
@@ -38,13 +38,10 @@ public class PelicanAI : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
-        // If colliding with the player, remove their held item and remove the pelican
+        // If colliding with the player, remove their held item, a point, and remove the pelican
         if (collision.gameObject.name == "Player")
         {
-            // Function needs to be made to do this stuff
-            //levelController.PlayerIsHoldingItem = false;
-            //levelController.PlayerHoldingItemType = null;
-            //levelController.FoodHoldingUIElement.GetComponent<Image>().gameObject.SetActive(false);
+            levelController.PlayerTouchedByPelican();
             pelicanMusic.Stop();
             levelMusic.Play();
             Destroy(this.gameObject);
