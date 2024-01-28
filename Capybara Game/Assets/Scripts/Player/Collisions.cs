@@ -41,6 +41,11 @@ public class Collisions : MonoBehaviour
             gameObject.transform.position = new Vector2(Burrow1.transform.position.x - 2, Burrow1.transform.position.y);
             pipe.Play();
         }
+        
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
         if (collision.gameObject.tag == "Nest")
         {
             levelController.PlayerDepositFood();
