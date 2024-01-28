@@ -9,7 +9,9 @@ public class PelicanAI : MonoBehaviour
     private AIDestinationSetter aiDestination;
     private AIPath aiPath;
     private LevelController levelController;
+    private AudioSource levelMusic;
 
+    public AudioSource pelicanMusic;
     public Rigidbody2D rb;
     public SpriteRenderer spriteRenderer;
 
@@ -23,6 +25,9 @@ public class PelicanAI : MonoBehaviour
         aiPath = GetComponent<AIPath>();
         aiDestination.target = GameObject.Find("Player").transform;
         levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
+        levelMusic = GameObject.Find("LevelMusic").GetComponent<AudioSource>();
+        levelMusic.Stop();
+        pelicanMusic.Play();
         deathTimer = 10;
     }
 
@@ -40,6 +45,8 @@ public class PelicanAI : MonoBehaviour
             //levelController.PlayerIsHoldingItem = false;
             //levelController.PlayerHoldingItemType = null;
             //levelController.FoodHoldingUIElement.GetComponent<Image>().gameObject.SetActive(false);
+            pelicanMusic.Stop();
+            levelMusic.Play();
             Destroy(this.gameObject);
         }
     }
@@ -51,6 +58,8 @@ public class PelicanAI : MonoBehaviour
         if (deathTimer <= 0)
         {
             Destroy(this.gameObject);
+            pelicanMusic.Stop();
+            levelMusic.Play();
         }
 
         // Flip the sprite towards the player

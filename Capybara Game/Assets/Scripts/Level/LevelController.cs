@@ -75,6 +75,8 @@ public class LevelController : MonoBehaviour
     public bool PlayerIsHoldingItem;
     public GameObject PlayerHoldingItemType;
 
+    private bool PelicanDebounce = false;
+
     
     ///////////////// END VARIABLES FOR FOOD HOLDING UI / NEST HANDLER /////////////////
     
@@ -357,6 +359,43 @@ public class LevelController : MonoBehaviour
 
         // Enable the nest collider.
         this.NestCollider.GetComponent<Collider2D>().enabled = true;
+    }
+
+    // Handle pelicon collider.
+    public void PlayerTouchedByPelican()
+    {
+        // Debounce check.
+        if (this.PelicanDebounce)
+        {
+            return;
+        }
+
+        // Set debounce.
+        this.PelicanDebounce = true;
+        
+        // Player has been hit by the pelican!
+        
+
+        // Remove food if holding.
+        if (this.PlayerIsHoldingItem)
+        {
+            // Remove food.
+            this.PlayerIsHoldingItem = false;
+            this.PlayerHoldingItemType = null;
+            this._UpdateFoodUI();
+        }
+
+        // Remove a point.
+        this.IndicatorsFilled--;
+
+        // Start debounce countdown.
+        StartCoroutine(_PelicanDebounce());
+    }
+
+    IEnumerator _PelicanDebounce()
+    {
+        yield return new WaitForSeconds(3);
+        this.PelicanDebounce = false;
     }
 
     // Handle nest collider.
