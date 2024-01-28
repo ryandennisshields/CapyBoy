@@ -1255,6 +1255,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2347218187255102233, guid: 76169bddadf9b30449c204f4902a9902, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 19.827518
+      objectReference: {fileID: 0}
+    - target: {fileID: 2347218187255102233, guid: 76169bddadf9b30449c204f4902a9902, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2347218187255102233, guid: 76169bddadf9b30449c204f4902a9902, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2347218187936010879, guid: 76169bddadf9b30449c204f4902a9902, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4905837333406453557, guid: 76169bddadf9b30449c204f4902a9902, type: 3}
       propertyPath: m_FontData.m_Font
       value: 
