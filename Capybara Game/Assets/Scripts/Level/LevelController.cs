@@ -1,4 +1,4 @@
-#define ALLOW_TEST_MODE 
+//#define ALLOW_TEST_MODE 
 
 using System;
 using System.Collections;
