@@ -16,9 +16,12 @@ public class Collisions : MonoBehaviour
     [SerializeField] private AudioSource pipe; //sound going into burrow
 
     private GameManager gameManager;
+    private LevelController levelController;
+
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -28,16 +31,7 @@ public class Collisions : MonoBehaviour
         {
             crunch.Play();
 
-            if (indicatorToFill <= 4)
-            {
-                filledIndicators[indicatorToFill].SetActive(true);
-                indicatorToFill++;
-            }
-
-            if (indicatorToFill >= 5)
-            {
-                gameManager.WinScreenCanvasVisible = true;
-            }
+            levelController.IndicatorsFilled++;
 
             Destroy(collision.gameObject);
         }
