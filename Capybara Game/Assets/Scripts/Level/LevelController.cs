@@ -93,8 +93,10 @@ public class LevelController : MonoBehaviour
     ///////////////// VARIABLES FOR TIMER HANDLING /////////////////
     public int PlayerTimeToComplete;
     public GameObject TimerUIElement;
+    public AudioSource TimeAlmostUpSoundFX;
     
     private bool RunTimerDown = true;
+    private bool HasTimerEnteredRedAlready = false;
     private float CompletionTimer;
     ///////////////// END VARIABLES FOR TIMER HANDLING /////////////////
 
@@ -110,8 +112,6 @@ public class LevelController : MonoBehaviour
 
     IEnumerator _FlashPointIndicator(GameObject indicatorToFlash, bool state)
     {
-
-        Debug.Log("Flashy flashy flash");
         for (int i = 0;i < (state ? 2 : 3); i++)
         {
             indicatorToFlash.SetActive(true);
@@ -121,6 +121,19 @@ public class LevelController : MonoBehaviour
         }
 
         indicatorToFlash.SetActive(state);
+    }
+
+    IEnumerator _FlashTimerRed()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            this.TimerUIElement.GetComponent<Text>().color = Color.red;
+            yield return new WaitForSeconds(0.25f);
+            this.TimerUIElement.GetComponent<Text>().color = Color.white;
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        this.TimerUIElement.GetComponent<Text>().color = Color.red;
     }
 
     private void FoodSpawnerUpdate()
@@ -155,6 +168,19 @@ public class LevelController : MonoBehaviour
             // Player has failed probably. Submit fail event.
             this.RunTimerDown = false;
             gameManager.FailScreenCanvasVisible = true;
+        }
+
+        // Only make timer red if not red already.
+        if (this.CompletionTimer <= 30 && !this.HasTimerEnteredRedAlready)
+        {
+            StartCoroutine(_FlashTimerRed());
+            this.TimeAlmostUpSoundFX.Play();
+            this.HasTimerEnteredRedAlready = true;
+        } else if (this.CompletionTimer > 30 && this.HasTimerEnteredRedAlready)
+        {
+            // Restore back to being white (time added!)
+            this.TimerUIElement.GetComponent<Text>().color = Color.white;
+            this.HasTimerEnteredRedAlready = false;
         }
     }
 
