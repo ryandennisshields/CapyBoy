@@ -47,6 +47,13 @@ public class GameManager : MonoBehaviour
             // WinScreenCanvas can be null in dev mode.
             if (value && this.WinScreenCanvas != null)
             {
+                // Stop level music if it exists.
+                if (GameObject.Find("LevelMusic"))
+                {
+                    // Play level music.
+                    GameObject.Find("LevelMusic").GetComponent<AudioSource>().Stop();
+                }
+
                 this.WinScreenCanvas.GetComponentInChildren<AudioSource>().Play();
 
                 // Pause the game (bypass GameManager for this).
@@ -69,6 +76,13 @@ public class GameManager : MonoBehaviour
 
                 if (value)
                 {
+                    // Stop level music if it exists.
+                    if (GameObject.Find("LevelMusic"))
+                    {
+                        // Play level music.
+                        GameObject.Find("LevelMusic").GetComponent<AudioSource>().Stop();
+                    }
+
                     this.FailScreenCanvas.GetComponentInChildren<AudioSource>().Play();
 
                     // Pause the game (bypass GameManager for this).
@@ -78,7 +92,7 @@ public class GameManager : MonoBehaviour
             {
                 if (value)
                 {
-                    Debug.LogWarning("Would have shown win screen here, but it doesn't exist in this context.");
+                    Debug.LogWarning("Would have shown fail screen here, but it doesn't exist in this context.");
                 }
             }
         }
