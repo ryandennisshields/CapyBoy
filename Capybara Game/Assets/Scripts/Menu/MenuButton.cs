@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class MenuButton : MonoBehaviour
 {
     // Specify all available button types.
-    public enum ButtonTypes { Start, Quit };
+    public enum ButtonTypes { Start, TutorialOK, Quit };
 
     public ButtonTypes ButtonType;
 
@@ -25,6 +25,10 @@ public class MenuButton : MonoBehaviour
         switch (ButtonType)
         {
             case ButtonTypes.Start:
+                gameManager.RequestLevelChange("Tutorial");
+                break;
+
+            case ButtonTypes.TutorialOK:
                 gameManager.RequestLevelChange("Joshua Playtest");
                 break;
 
