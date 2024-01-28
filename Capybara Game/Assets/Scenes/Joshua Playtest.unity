@@ -2857,7 +2857,7 @@ MonoBehaviour:
   - {fileID: 7112263122644182865, guid: a0a7c253d49f36643bc5e2e32d978fcc, type: 3}
   - {fileID: 5478439749523754507, guid: fee4b701c3bdec74c8ef443316f216bd, type: 3}
   FoodSpawnSoundFX: {fileID: 1411793080}
-  FoodSpawnDelay: 5
+  FoodSpawnDelay: 7
   PlayerTimeToComplete: 120
   TimerUIElement: {fileID: 1748703314}
 --- !u!4 &1411793078
