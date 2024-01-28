@@ -6,9 +6,24 @@ public class DestroyFood : MonoBehaviour
 {
     public float foodLifetime = 10;
 
+    // The initial food spawn must not expire.
+    public bool IsStarterFood;
+
+    void Awake()
+    {
+        // Don't run this script on starter food!
+        if (IsStarterFood)
+        {
+            Destroy(this.gameObject.GetComponent<DestroyFood>());
+        }
+    }
+
     void Start()
     {
-        StartCoroutine(foodExpire());
+        if (!IsStarterFood)
+        {
+            StartCoroutine(foodExpire());
+        }
     }
 
     IEnumerator foodExpire()
@@ -19,6 +34,9 @@ public class DestroyFood : MonoBehaviour
 
     void Expire()
     {
-        Destroy(gameObject);
+        if (!IsStarterFood)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

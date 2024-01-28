@@ -27,10 +27,8 @@ public class WinScreenButton : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(previousParentCanvasVisibleState.ToString() + ", " + parentCanvas.enabled.ToString());
         if (previousParentCanvasVisibleState != parentCanvas.enabled)
         {
-            Debug.Log("State of UI changed to " + parentCanvas.enabled.ToString());
             previousParentCanvasVisibleState = parentCanvas.enabled;
 
             if (parentCanvas.enabled)
@@ -46,7 +44,6 @@ public class WinScreenButton : MonoBehaviour
     private async Task ShowButton()
     {
         await Task.Delay(TimeSpan.FromSeconds(2));
-        Debug.Log("Now can show button.");
         this.gameObject.SetActive(true);
     }
 

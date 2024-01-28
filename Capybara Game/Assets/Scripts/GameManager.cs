@@ -55,6 +55,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private bool _FailScreenCanvasVisible = false;
+    public bool FailScreenCanvasVisible
+    {
+        get { return _FailScreenCanvasVisible; }
+        set
+        {
+            this._FailScreenCanvasVisible = value;
+            // FailScreen can be null in dev mode.
+            if (this.FailScreenCanvas != null)
+            {
+                this.FailScreenCanvas.enabled = value;
+
+                if (value)
+                {
+                    this.FailScreenCanvas.GetComponentInChildren<AudioSource>().Play();
+
+                    // Pause the game (bypass GameManager for this).
+                    Time.timeScale = 0;
+                }
+            } else
+            {
+                if (value)
+                {
+                    Debug.LogWarning("Would have shown win screen here, but it doesn't exist in this context.");
+                }
+            }
+        }
+    }
+
     // Array of Scenes to inhibit pause on.
     // Pausing here could cause things to break.
     private readonly string[] InhibitPauseScenes =
@@ -68,6 +97,9 @@ public class GameManager : MonoBehaviour
 
     // Storage container for reference to WinScreen Canvas.
     private Canvas WinScreenCanvas;
+
+    // Storage container for reference to FailScreen Canvas.
+    private Canvas FailScreenCanvas;
 
     // Instantisation function.
     // Just makes sure this class remains in memory.
@@ -98,6 +130,12 @@ public class GameManager : MonoBehaviour
             if (WinScreenCanvas != null)
             {
                 WinScreenCanvas.enabled = false;
+            }
+
+            FailScreenCanvas = this.gameObject.GetComponentsInChildren<Canvas>().ToList().Find(x => x.name.Contains("FailCanvas"));
+            if (FailScreenCanvas != null)
+            {
+                FailScreenCanvas.enabled = false;
             }
         } else
         {
@@ -187,7 +225,6 @@ public class GameManager : MonoBehaviour
     private void _PauseGame()
     {
         // For now simply just set TimeScale to 0
-        //Debug.Log("Game has been paused.");
         Time.timeScale = 0;
 
         // Display pause UI if instantiated.
@@ -201,7 +238,6 @@ public class GameManager : MonoBehaviour
     private void _UnpauseGame()
     {
         // For now simply just set TimeScale to 1
-        //Debug.Log("Game has been unpaused.");
         Time.timeScale = 1;
 
         // Hide pause UI if instantiated.

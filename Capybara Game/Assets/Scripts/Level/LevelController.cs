@@ -1,5 +1,6 @@
 #define ALLOW_TEST_MODE 
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,9 @@ public class LevelController : MonoBehaviour
         {
             // Limit to 5.
             if (value > AvailableIndicators.Length) return;
+
+            // Disable ability to reset this way.
+            if (_IndicatorsFilled == AvailableIndicators.Length) return; 
 
             _IndicatorsFilled = value;
 
@@ -60,7 +64,16 @@ public class LevelController : MonoBehaviour
     public int FoodSpawnDelay;
 
     private float FoodSpawningTimer;
+    private bool IsFirstFoodSpawn = true;
     ///////////////// END VARIABLES FOR RANDOM FOOD SPAWN HANDLING /////////////////
+
+    ///////////////// VARIABLES FOR TIMER HANDLING /////////////////
+    public int PlayerTimeToComplete;
+    public GameObject TimerUIElement;
+    
+    private bool RunTimerDown = true;
+    private float CompletionTimer;
+    ///////////////// END VARIABLES FOR TIMER HANDLING /////////////////
 
     private void Start()
     {
@@ -68,7 +81,8 @@ public class LevelController : MonoBehaviour
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         // Set timer.
-        this.FoodSpawningTimer = FoodSpawnDelay; 
+        this.FoodSpawningTimer = FoodSpawnDelay;
+        this.CompletionTimer = this.PlayerTimeToComplete;
     }
 
     private void FoodSpawnerUpdate()
@@ -84,36 +98,102 @@ public class LevelController : MonoBehaviour
         }
     }
 
+    private void CompletionTimerUpdate()
+    {
+        // Don't run the timer if it's disabled.
+        if (!this.RunTimerDown)
+        {
+            return;
+        }
+
+        // Reduce timer.
+        this.CompletionTimer -= Time.deltaTime;
+
+        // Perform UI update.
+        this.TimerUIElement.GetComponent<Text>().text = TimeSpan.FromSeconds((double)CompletionTimer).ToString(@"mm\:ss");
+
+        if (this.CompletionTimer <= 0)
+        {
+            // Player has failed probably. Submit fail event.
+            this.RunTimerDown = false;
+            gameManager.FailScreenCanvasVisible = true;
+        }
+    }
+
+# if ALLOW_TEST_MODE
+    private void DebugController()
+    {
+        // DEBUG FUNCTION: Increase time by 10 seconds when button pressed.
+        // Control: A
+        if (Input.GetAxisRaw("Left Trigger") == 0 && Input.GetKeyDown(KeyCode.Joystick1Button0))
+        {
+            this.CompletionTimer += 10;
+        }
+
+        // DEBUG FUNCTION: Decrease time by 10 seconds when button pressed.
+        // Control: B
+        if (Input.GetAxisRaw("Left Trigger") == 0 && Input.GetKeyDown(KeyCode.Joystick1Button1))
+        {
+            this.CompletionTimer -= 10;
+        }
+
+        // DEBUG FUNCTION: Add to indicator when button pressed.
+        // Control: LT + A
+        if (Input.GetAxisRaw("Left Trigger") == -1 && Input.GetKeyDown(KeyCode.Joystick1Button0))
+        {
+            this.IndicatorsFilled++;
+        }
+
+        // DEBUG FUNCTION: Remove from indicator when button pressed.
+        // Control: LT + B
+        if (Input.GetAxisRaw("Left Trigger") == -1 && Input.GetKeyDown(KeyCode.Joystick1Button1))
+        {
+            this.IndicatorsFilled--;
+        }
+
+        // DEBUG FUNCTION: Instantly fail when button pressed.
+        // Control: LT + RB + LS
+        if (Input.GetAxisRaw("Left Trigger") == -1 && Input.GetKey(KeyCode.Joystick1Button5) && Input.GetKeyDown(KeyCode.Joystick1Button9))
+        {
+            this.CompletionTimer = 1;
+        }
+    }
+# endif
+
     private void FoodSpawner_CreateFood()
     {
-        GameObject SpawnLocation = null;
+        // Use the first spawn location if this is the first food spawn, otherwise pass to the food handler.
+        GameObject SpawnLocation = this.IsFirstFoodSpawn ? this.FoodSpawnLocations[0] : null;
 
-        // Get all foods.
-        GameObject[] ActiveFoods = GameObject.FindGameObjectsWithTag("Food");
-
-        bool GettingPosition = true;
-        while (GettingPosition)
+        // Only try and get if we are not the first spawn location.
+        if (SpawnLocation == null)
         {
-            bool IsFoodNearbyThisPoint = false;
-            SpawnLocation = this.FoodSpawnLocations[Random.Range(0, this.FoodSpawnLocations.Length)];
-            for (int i = 0; i < ActiveFoods.Length; i++)
+            // Get all foods.
+            GameObject[] ActiveFoods = GameObject.FindGameObjectsWithTag("Food");
+
+            bool GettingPosition = true;
+            while (GettingPosition)
             {
-                //Debug.Log(ActiveFoods[i].name + " is " + Vector2.Distance(SpawnLocation.GetComponent<Transform>().position, ActiveFoods[i].transform.position).ToString() + "away!");
-                if (Vector2.Distance(SpawnLocation.GetComponent<Transform>().position, ActiveFoods[i].transform.position) < 1)
+                bool IsFoodNearbyThisPoint = false;
+                SpawnLocation = this.FoodSpawnLocations[UnityEngine.Random.Range(0, this.FoodSpawnLocations.Length)];
+                for (int i = 0; i < ActiveFoods.Length; i++)
                 {
-                    IsFoodNearbyThisPoint = true;
+                    if (Vector2.Distance(SpawnLocation.GetComponent<Transform>().position, ActiveFoods[i].transform.position) < 1)
+                    {
+                        IsFoodNearbyThisPoint = true;
+                        break;
+                    }
+                }
+
+                if (!IsFoodNearbyThisPoint)
+                {
+                    GettingPosition = false;
                     break;
                 }
             }
-
-            if (!IsFoodNearbyThisPoint)
-            {
-                GettingPosition = false;
-                break;
-            }
         }
         
-        GameObject FoodObject = this.FoodTypes[Random.Range(0, this.FoodTypes.Length)];
+        GameObject FoodObject = this.FoodTypes[UnityEngine.Random.Range(0, this.FoodTypes.Length)];
 
         # pragma warning disable CS0165
         Transform SpawnPosition = SpawnLocation.GetComponent<Transform>();
@@ -123,6 +203,13 @@ public class LevelController : MonoBehaviour
 
         // Create the object with the given parameters.
         GameObject newFood = Instantiate(FoodObject, SpawnPosition.position, SpawnPosition.rotation);
+
+        // Ensure that the first food doesn't destroy itself.
+        if (this.IsFirstFoodSpawn)
+        {
+            this.IsFirstFoodSpawn = false;
+            newFood.GetComponent<DestroyFood>().IsStarterFood = true;
+        }
 
         // Tie into Nest Handler, don't enable collisions if food isn't meant to be picked up
         if (this.PlayerIsHoldingItem)
@@ -136,8 +223,6 @@ public class LevelController : MonoBehaviour
 
     private void _UpdateFoodUI()
     {
-        Debug.Log(this.PlayerIsHoldingItem);
-
         // Get Image from UI element.
         Image uiElementImage = this.FoodHoldingUIElement.GetComponent<Image>();
 
@@ -161,7 +246,6 @@ public class LevelController : MonoBehaviour
     public void PlayerEatFood(GameObject foodObject)
     {
         // Player has eaten a food.
-        Debug.Log("A food has been eaten (yum!)");
 
         // TODO: perhaps provide audible feedback that player cannot pick more than
         // one item up?
@@ -245,6 +329,11 @@ public class LevelController : MonoBehaviour
     private void Update()
     {
         this.FoodSpawnerUpdate();
+        this.CompletionTimerUpdate();
+
+#if ALLOW_TEST_MODE
+        this.DebugController();
+#endif
     }
 
 
