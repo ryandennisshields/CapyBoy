@@ -6,15 +6,16 @@ TagManager:
   tags:
   - Food
   - GameManager
+  - Nest
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Walls
   - Water
   - UI
-  - 
-  - 
+  - Boundaries
+  - Pelican
   - 
   - 
   - 
