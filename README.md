@@ -1,4 +1,4 @@
-This is the repository for the Capyboy game, a game submitted to Global Game Jam 2024.
+This is the repository for the CapyBoy game, a game submitted to Global Game Jam 2024.
 
 Build Instructions:
 1. Clone the repository to your local machine using `git clone https://github.com/ryandennisshields/GGJ2024-Project` or any other method.
